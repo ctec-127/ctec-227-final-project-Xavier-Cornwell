@@ -73,3 +73,11 @@
   color: hotpink;
 }
 
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+.company-info{
+  margin:0 auto;
+}
