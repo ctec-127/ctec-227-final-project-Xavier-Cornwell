@@ -175,7 +175,10 @@
                 </div>
               </div>
               <div class="card-body md-1">
-                <h4 class="col-12">tags:</h4>
+                <h4 class="col-12 mb-0">tags:</h4>
+                <div class="item-content-block tags mt-3">
+                  <a href="#">lorem</a> <a href="#">loremipse</a> <a href="#">Esrite</a> <a href="#">remip</a> <a href="#">serte</a> <a href="#">quiaxms</a> <a href="#">loremipse</a> <a href="#">Esrite</a>
+                </div>
               </div>
             </div>
           </div>
@@ -211,21 +214,22 @@
                 </h3>
               </div>
               <div class="card-body ">
-
-                <form action="">
+                <div class="rating mt-5 align-items-center pb-4">
+                  <span class="fa fa-heart checked"></span>
+                  <span class="fa fa-heart checked"></span>
+                  <span class="fa fa-heart checked"></span>
+                  <span class="fa fa-heart"></span>
+                  <span class="fa fa-heart"></span>
+                </div>
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?> " method="POST">
                   <div class="form-group">
                     <label>Review</label>
                     <textarea type="text" class="form-control" placeholder="Leave a Review" value="Mike" rows="10"
                       cols="50"></textarea>
                   </div>
+                  <button class="btn-lg btn-primary" style="border:none;" type="submit">Submit Review</button>
                 </form>
-<div class="rating mt-5 align-items-center pb-4">
-                <span class="fa fa-heart checked"></span>
-                <span class="fa fa-heart checked"></span>
-                <span class="fa fa-heart checked"></span>
-                <span class="fa fa-heart"></span>
-                <span class="fa fa-heart"></span>
-              </div>
+
               </div>
             </div>
           </div>

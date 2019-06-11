@@ -151,26 +151,27 @@
               <div class="card">
                   <div class="card-header">
                     <h5 class="title">Advanced Search</h5>
+                    <?php require_once __DIR__ .'../inc/search.inc.php' ;?>
                   </div>
                   <div class="card-body">
-                    <form>
+                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?> " method="post">
                       <div class="row">
                         <div class="col-md-5 pr-md-1">
                           <div class="form-group">
                             <label>Company Name</label>
-                            <input type="text" class="form-control"placeholder="Company" value="">
+                            <input type="text" class="form-control"placeholder="Company" id="name" value="">
                           </div>
                         </div>
                         <div class="col-md-3 px-md-1">
                           <div class="form-group">
                             <label>Role</label>
-                            <input type="text" class="form-control" placeholder="Role" value="">
+                            <input type="text" class="form-control" placeholder="Role" id="role" value="">
                           </div>
                         </div>
                         <div class="col-md-4 pl-md-1">
                           <div class="form-group">
                             <label for="exampleInputEmail1">Rating</label>
-                            <input type="email" class="form-control" placeholder="Rate">
+                            <input type="text" class="form-control" id="rate" placeholder="Rate">
                           </div>
                         </div>
                       </div>
@@ -178,13 +179,13 @@
                         <div class="col-md-6 pr-md-1">
                           <div class="form-group">
                             <label>Tags</label>
-                            <input type="text" class="form-control" placeholder="tags" value="">
+                            <input type="text" class="form-control" id="tags" placeholder="tags" value="">
                           </div>
                         </div>
                         <div class="col-md-6 pl-md-1">
                           <div class="form-group">
                             <label>Country</label>
-                            <input type="text" class="form-control" placeholder="Country" value="">
+                            <input type="text" class="form-control" id="country" placeholder="country" value="">
                           </div>
                         </div>
                       </div>
