@@ -63,4 +63,14 @@ function delete_post($db){
 		return false;
 	}
 }
+
+
+
+
+
+
+
+
+
+
 ?>

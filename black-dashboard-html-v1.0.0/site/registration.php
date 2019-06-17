@@ -55,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $email = $db->real_escape_string($_POST['email']);
         $password = hash('sha512', $_POST['password']);
         $role = $db->real_escape_string($_POST['role']);
-        $sql = "INSERT INTO user (username, first_name, last_name, email, password, role) VALUES ('$user_name','$first_name' ,'$last_name','$email','$password','$role')";
+        $sql = "INSERT INTO user (username, first_name, last_name, email, password, role, avatar_path) VALUES ('$user_name','$first_name' ,'$last_name','$email','$password','$role','default-avatar.png')";
             // echo $sql;
         $result = $db->query($sql);
 

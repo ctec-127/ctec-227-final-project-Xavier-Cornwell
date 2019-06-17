@@ -1,3 +1,15 @@
+<?php    
+    /* login.php */
+    session_start();
+
+    try {
+      require_once('../inc/mysqli_connect.php');
+      require_once('../inc/functions.inc.php');
+      log_page($db,"dashboard");
+    } catch(Exception $e) {
+      $error = $e->getMessage();
+    }?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,10 +19,9 @@
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Consumer Gaming
+      Consumer Gaming
   </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-    name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -24,126 +35,28 @@
 </head>
 
 <body class=" ">
-  <div class="wrapper ">
-    <div class="sidebar">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-    -->
-      <div class="sidebar-wrapper">
-        <div class="logo">
-          <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-            CG
-          </a>
-          <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-            Consumer Gaming
-          </a>
-        </div>
-        <ul class="nav">
-          <li>
-            <a href="./index.html">
-              <i class="tim-icons icon-align-center"></i>
-              <p>Home</p>
-            </a>
-          </li>
-          <li class="active ">
-            <a href="./dashboard.html">
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Company Info</p>
-            </a>
-          </li>
-          <li>
-            <a href="./icons.html">
-              <i class="tim-icons icon-atom"></i>
-              <p>Search</p>
-            </a>
-          </li>
-          <li>
-          <li>
-            <a href="./user.html">
-              <i class="tim-icons icon-single-02"></i>
-              <p>User Profile</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="main-panel">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent   ">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <div class="navbar-toggle d-inline">
-              <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </button>
-            </div>
-            <a class="navbar-brand" href="#pablo">Consumer Gaming</a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navigation">
-            <ul class="navbar-nav ml-auto ">
-              <!-- <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-        </div>
 
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div> -->
-              <li class="dropdown nav-item">
-                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <div class="photo">
-                    <img src="../assets/img/anime3.png">
-                  </div>
-                  <b class="caret d-none d-lg-block d-xl-block"></b>
-                  <p class="d-lg-none">
-                    Log out
-                  </p>
-                </a>
-                <ul class="dropdown-menu dropdown-navbar">
-                  <li class="nav-link">
-                    <a href="user.html" class="nav-item dropdown-item">Profile</a>
-                  </li>
-                  <div class="dropdown-divider"></div>
-                  <li class="nav-link">
-                    <a href="#" class="nav-item dropdown-item">Log out</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="separator d-lg-none"></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <i class="tim-icons icon-simple-remove"></i>
-              </button>
-            </div>
-            <div class="modal-footer">
-            </div>
-          </div>
-        </div>
-      </div>
+ <?php 
+  
+     $id=$_GET['id'];
+    
+       $sql = "SELECT *
+       FROM company 
+        WHERE company_id = $id";
+                     
+  $result = $db->query($sql);  
+  
+  while ($row = $result->fetch_assoc()) {
+      $companyID=$row['company_id'];
+      $company = $row['name'];
+      $service= $row['service'];
+      $country =$row['country'];
+      $logo =  $row['logo_path'];
+      $about= $row['company_about'];
+ 
+ 
+ ?>
+      <?php require_once "..\inc\header.inc.php";   ?>
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
@@ -160,29 +73,35 @@
                             <div class="block block-four"></div>
                             <a href="#">
                               
-                              <h2 class="title text-center">Sony Interactive Entertainment</h2>
-                              <img class="" src="../assets/img/sony.jpg" alt="..." class="responsive ">
+                              <h2 class="title text-center"><?php echo $company;?></h2>
+                              <img class="" src="uploads/<?php echo $logo;?>" alt="..." class="responsive " style=" min-width:100%; max-height:400px;">
                             </a>
                             <h4 class="text-center mt-3 mb-4">
-                              Publisher
+                            <?php echo $service;?>
                             </h4>
                           </div>
                         </p>
+                        <p><?php echo $country;?></p>
                         <p class="card-description text-left">
-                            Sony Interactive Entertainment Inc (SIE) is an American multinational video game and digital entertainment company that is a wholly owned subsidiary of Sony Corporation of America, the central hub for the American businesses under the Japanese conglomerate Sony Corporation.[1] The company was founded in Tokyo, Japan, and established on November 16, 1993, as Sony Computer Entertainment (SCE), to handle Sony's venture into video game development for the PlayStation systems. 
+                        <?php echo $about;?> 
                         </p>
                   </div>
                 </div>
               </div>
               <div class="card-body md-1">
-                <h4 class="col-12 mb-0">tags:</h4>
+                <!-- <h4 class="col-12 mb-0">tags:</h4> -->
                 <div class="item-content-block tags mt-3">
-                  <a href="#">lorem</a> <a href="#">loremipse</a> <a href="#">Esrite</a> <a href="#">remip</a> <a href="#">serte</a> <a href="#">quiaxms</a> <a href="#">loremipse</a> <a href="#">Esrite</a>
+                  <!-- <a href="#">lorem</a> <a href="#">loremipse</a> <a href="#">Esrite</a> <a href="#">remip</a> <a href="#">serte</a> <a href="#">quiaxms</a> <a href="#">loremipse</a> <a href="#">Esrite</a> -->
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <?php 
+ 
+
+  }
+?>
         <div class="row">
           <div class="col-lg-6 col-md-12">
             <div class="card card-chart">
@@ -305,6 +224,8 @@
       </footer>
     </div>
   </div>
+
+
   <!--   Core JS Files   -->
   <script src="../assets/js/core/jquery.min.js"></script>
   <script src="../assets/js/core/popper.min.js"></script>

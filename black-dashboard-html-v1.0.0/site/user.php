@@ -1,3 +1,26 @@
+<?php    
+    /* login.php */
+    session_start();
+
+    try {
+      require_once('../inc/mysqli_connect.php');
+      require_once('../inc/functions.inc.php');
+      log_page($db,"users");
+    } catch(Exception $e) {
+      $error = $e->getMessage();
+    }
+    
+    //checking if use ris logged in
+    if (isset($_SESSION['loggedin'])) {
+      echo '';
+    }
+    else {
+      header('login.php');    
+    }
+    
+    
+    ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,129 +46,11 @@
 </head>
 
 <body class=" ">
-  <div class="wrapper ">
-      <div class="sidebar">
-          <!--
-            Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-        -->
-          <div class="sidebar-wrapper">
-            <div class="logo">
-              <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                CG
-              </a>
-              <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                Consumer Gaming
-              </a>
-            </div>
-            <ul class="nav">
-                <li>
-                    <a href="./index.html">
-                      <i class="tim-icons icon-align-center"></i>
-                      <p>Home</p>
-                    </a>
-                  </li>
-              <li >
-                <a href="./dashboard.html">
-                  <i class="tim-icons icon-chart-pie-36"></i>
-                  <p>Company Info</p>
-                </a>
-              </li>
-              <li>
-                <a href="./icons.html">
-                  <i class="tim-icons icon-atom"></i>
-                  <p>Search</p>
-                </a>
-              </li>
-              <li>
-              <li class="active ">
-                <a href="./user.html">
-                  <i class="tim-icons icon-single-02"></i>
-                  <p>User Profile</p>
-                </a>
-              </li>
-              <li>
 
-            </ul>
-          </div>
-        </div>
-    <div class="main-panel">
-           <!-- Navbar -->
-           <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent   ">
-              <div class="container-fluid">
-                <div class="navbar-wrapper">
-                  <div class="navbar-toggle d-inline">
-                    <button type="button" class="navbar-toggler">
-                      <span class="navbar-toggler-bar bar1"></span>
-                      <span class="navbar-toggler-bar bar2"></span>
-                      <span class="navbar-toggler-bar bar3"></span>
-                    </button>
-                  </div>
-                  <a class="navbar-brand" href="#pablo">Consumer Gaming</a>
-                </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-                  aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-bar navbar-kebab"></span>
-                  <span class="navbar-toggler-bar navbar-kebab"></span>
-                  <span class="navbar-toggler-bar navbar-kebab"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navigation">
-                  <ul class="navbar-nav ml-auto ">
-                    <!-- <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <i class="tim-icons icon-simple-remove"></i>
-                </button>
-              </div>
-      
-              <div class="modal-footer">
-              </div>
-            </div>
-          </div>
-        </div> -->
-                    <li class="dropdown nav-item">
-                      <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <div class="photo">
-                          <img src="../assets/img/anime3.png">
-                        </div>
-                        <b class="caret d-none d-lg-block d-xl-block"></b>
-                        <p class="d-lg-none">
-                          Log out
-                        </p>
-                      </a>
-                      <ul class="dropdown-menu dropdown-navbar">
-                        <li class="nav-link">
-                          <a href="user.html" class="nav-item dropdown-item">Profile</a>
-                        </li>
-                        <div class="dropdown-divider"></div>
-                        <li class="nav-link">
-                          <a href="#" class="nav-item dropdown-item">Log out</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="separator d-lg-none"></li>
-                  </ul>
-                </div>
-              </div>
-            </nav>
-            <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <i class="tim-icons icon-simple-remove"></i>
-                    </button>
-                  </div>
-                  <div class="modal-footer">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Navbar -->
+<?php  
+require_once "..\inc\update.inc.php"; 
+require_once "..\inc\header.inc.php";   
+?>
       <div class="content">
         <div class="row">
           <div class="col-md-8">
@@ -154,12 +59,19 @@
                 <h5 class="title">Edit Profile</h5>
               </div>
               <div class="card-body">
-                <form>
+                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?> " method="post" enctype="multipart/form-data" >
                   <div class="row">
                     <div class="col-md-4 pr-md-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="text" class="form-control" placeholder="mike@email.com" value="mike@email.com">
+                        <input type="text" class="form-control" placeholder="mike@email.com" id="email" name="email" value="<?php echo $_SESSION['email'];?>">
+
+                      </div>
+                    </div>
+                    <div class="col-md-6 pr-md-1">
+                      <div class="form-group">
+                        <label>username</label>
+                        <input type="text" class="form-control" placeholder="username" id="username" name="username" value="<?php echo $_SESSION['username'];  ?>">
                       </div>
                     </div>
                   </div>
@@ -167,13 +79,13 @@
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
                         <label>First Name</label>
-                        <input type="text" class="form-control" placeholder="Company" value="Mike">
+                        <input type="text" class="form-control" placeholder="First Name" id="firstname" name="firstname" value="<?php echo $_SESSION['firstname'] ; ?>">
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
                         <label>Last Name</label>
-                        <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                        <input type="text" class="form-control" placeholder="Last Name" id="lastname" name="lastname" value="<?php echo $_SESSION['lastname'];  ?>">
                       </div>
                     </div>
                   </div>
@@ -181,7 +93,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Role</label>
-                        <input type="text" class="form-control" placeholder="Role" value="User" disabled>
+                        <input type="text" class="form-control" placeholder="Role" value="<?php echo $_SESSION['role']; ?>" disabled>
                       </div>
                     </div>
                   </div>
@@ -189,14 +101,21 @@
                     <div class="col-md-8">
                       <div class="form-group">
                         <label>About Me</label>
-                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
+                        <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" id="about" name="about"><?php echo $_SESSION['about'];?>  </textarea>
+                     
                       </div>
+                      <label>Upload Avatar Photo</label>
+                      <input type="hidden" name="MAX_FILE_SIZE" value="100000000"><br>
+		<input type="file" name="file_upload" class="btn btn-sm" style="background-color:none;">
                     </div>
+                    
                   </div>
-                </form>
+                  
+               
               </div>
               <div class="card-footer">
                 <button type="submit" class="btn btn-fill btn-primary">Save</button>
+                </form>
               </div>
             </div>
           </div>
@@ -210,8 +129,8 @@
                     <div class="block block-three"></div>
                     <div class="block block-four"></div>
                     <a href="#">
-                      <img class="avatar" src="../assets/img/anime6.png" alt="...">
-                      <h5 class="title">Mike Andrew</h5>
+                      <img class="avatar" src="uploads/<?php echo $_SESSION['avatar']; ?>" alt="...">
+                      <h5 class="title"> <?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname'] ;?></h5>
                     </a>
                     <p class="description">
                       User
@@ -219,10 +138,11 @@
                   </div>
                 </p>
                 <p class="card-description">
-                  Do not be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                <?php echo $_SESSION['about']; ?>
                 </p>
               </div>
               <div class="card-footer ">
+
                 </div>
               </div>
             </div>

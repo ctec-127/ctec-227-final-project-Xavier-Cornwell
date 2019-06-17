@@ -1,20 +1,14 @@
 <?php // Filename: connect.inc.php
 
-require_once __DIR__ . "/../db/mysqli_connect.inc.php";
-require_once __DIR__ . "/../app/config.inc.php";
+require_once  "mysqli_connect.php";
+
 
 
 
 // Code to display search results
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // build SQL
-    //checking if the form is empty. if it is post null if its not generate a string for the query for search
-    if (!empty($_POST["name"])) {
-        $name = $_POST["name"];
-        $company = " AND name = " .  '"' . $name. '"';
-    } else {
-        $name = '';
-    }
+
 
     if (!empty($_POST["role"])) {
         $service = $_POST["role"];
@@ -30,18 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nameSQL = '!=' . '"'. "null" .'"'  ;
     }
 
-    if (!empty($_POST["email"])) {
-        $email = $_POST["email"];
-        $emailSQL = " AND email =" . '"'. $email . '"';
+    if (!empty($_POST["country"])) {
+        $country= $_POST["country"];
+        $countrySQL = " AND country=" . '"'. $country . '"';
     } else {
-        $emailSQL = '';
+        $countrySQL = '';
     }
-    if (!empty($_POST["phone"])) {
-        $phone = $_POST["phone"];
-        $phoneSQL = " AND phone =" . '"' . $phone .  '"';
-    } else {
-        $phoneSQL = '';
-    }
+
    
 
 //query for the form using concatination
@@ -49,38 +38,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $result = $db->query($sql);
 
+    ?>      
+       <div class="content col-12 pl-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-5">
+                            <div class="card-header">
+                                <h2 class="title">Results</h2>
+                                <p class="category">Reviews for you're consumer satisfaction
+                                    
+                                </p>
+                            </div>
+                            <div class="card-body all-icons">
+                                <div class="row">
+    <?php  
     if ($result->num_rows > 0) {
          
-            while ($row = $result->fetch_assoc()){?>
-                # display rows and columns of data
-                <div class="font-icon-list  col-sm-4 col-xs-6 col-xs-6">
-                                            
-                <div class="font-icon-detail pt-0">
-                    <img class="" src="<?php echo $row['logo_path']?>" alt="..." class="responsive mb-3">
-                    <h4 class="text-center mb-0 mt-3"><?php echo $row['name']?></h4>
-                    <p class="mt-0"><?php echo $row['service']?></p>
-                    <div class="ratings">
-                        <span class="fa fa-heart checked"></span>
-                        <span class="fa fa-heart checked"></span>
-                        <span class="fa fa-heart checked"></span>
-                        <span class="fa fa-heart"></span>
-                        <span class="fa fa-heart"></span>
-                      </div>
-                </div>
-            </div>
+            while ($row = $result->fetch_assoc()){
+                
+                $companyID=$row['company_id'];
+                $company = $row['name'];
+                $service= $row['service'];
+                $country =$row['country'];
+                $logo =  $row['logo_path'];
+        
+                ?>
+
+                                    <div class="font-icon-list  col-sm-6 col-md-4 " >
+                                        <div class="font-icon-detail pt-0">
+                                            <a href="dashboard.php?id=<?php echo $companyID;?>">
+                                            <img class="" src="uploads/<?php echo $logo; ?>" alt="..." class="responsive" style="height:300px; width:100%;">
+                                            </a>
+                                            <h4 class="text-center mb-0 mt-3"><?php echo $company; ?></h4>
+                                            <p class="mt-0"> <?php echo $service; ?></p>
+                                            <p class="mt-0"> <?php echo $country; ?></p>
+                                            <div class="ratings">
+                                                <span class="fa fa-heart checked"></span>
+                                                <span class="fa fa-heart checked"></span>
+                                                <span class="fa fa-heart checked"></span>
+                                                <span class="fa fa-heart"></span>
+                                                <span class="fa fa-heart"></span>
+                                              </div>
+                                        </div>
+                                    </div>
+     
            
            <?php
             } // end while
-            // closing table tag and div
-            echo '</table>';
-            echo '</div> ';
-            //echoing out javascript to send the user to the bottom of the page when the post is made
-            echo '<script type="text/javascript">location.href = "advanced-search.php#table";</script>';
+            echo'</div >';
             ?>
+
+ 
+</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
         <?php
     } else {
         echo "<h3 class=\"mt-5\">Rut-roh. No data was found for your query.</h3>";
     }
 
 }
+
+
 ?>

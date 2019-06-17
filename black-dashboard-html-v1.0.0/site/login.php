@@ -16,8 +16,10 @@
 
     <?php
     /* login.php */
+   
     session_start();
-
+    session_destroy();
+    session_start();
     try {
       require_once('../inc/mysqli_connect.php');
       require_once('../inc/functions.inc.php');
@@ -42,9 +44,11 @@
         $_SESSION['id'] = $row['user_id'];
         $_SESSION['loggedin'] = 1;
         $_SESSION['role'] = $row['role'];
-        $_SESSION['avatar']=$row['avatar_path']
-        $_SESSION['username']=$row['username']
-        header("location: index.html");
+        $_SESSION['avatar']=$row['avatar_path'];
+        $_SESSION['username']=$row['username'];
+        $_SESSION['email']=$row['email'];
+        $_SESSION['about']=$row['about'];
+        header("location: index.php");
       } else {
         return false;
       }
