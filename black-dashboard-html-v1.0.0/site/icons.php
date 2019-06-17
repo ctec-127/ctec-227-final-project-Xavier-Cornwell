@@ -60,20 +60,9 @@
                             <input type="text" class="form-control" placeholder="Role" id="role" name="role" >
                           </div>
                         </div>
-                        <div class="col-md-4 pl-md-1">
-                          <div class="form-group">
-                            <label for="rate">Rating</label>
-                            <input type="text" class="form-control" id="rate" placeholder="Rate" name="rate">
-                          </div>
-                        </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-6 pr-md-1">
-                          <div class="form-group">
-                            <label>Tags</label>
-                            <input type="text" class="form-control" id="tags" placeholder="tags" name="tags">
-                          </div>
-                        </div>
+  
                         <div class="col-md-6 pl-md-1">
                           <div class="form-group">
                             <label>Country</label>

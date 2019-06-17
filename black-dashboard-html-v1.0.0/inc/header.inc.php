@@ -25,14 +25,29 @@
                   <p>Search</p>
                 </a>
               </li>
-              <li>
+              
+              <?php //Setting up links for different types of users
+              if (isset($_SESSION['loggedin'])) {
+               
+              ?>
               <li>
                 <a href="./user.php">
                   <i class="tim-icons icon-single-02"></i>
                   <p>User Profile</p>
                 </a>
-              </li>
-
+              </li>           
+             <?php } ?>
+             <?php //Setting up links for different types of users
+              if (isset($_SESSION['loggedin']) && $_SESSION['role']=="admin") {
+               
+              ?>
+              <li>
+                <a href="./admin.php">
+                  <i class="tim-icons icon-single-01"></i>
+                  <p>Admin</p>
+                </a>
+              </li>           
+             <?php } ?>
             </ul>
           </div>
         </div>
@@ -97,7 +112,16 @@
                         </li>
                         <div class="dropdown-divider"></div>
                         <li class="nav-link">
+                        <?php //Setting up login in and logout button
+              if (isset($_SESSION['loggedin'])) { ?>
                           <a href="login.php" class="nav-item dropdown-item">Log out</a>
+                          <?php } 
+                          else { ?>
+                            <a href="login.php" class="nav-item dropdown-item">Log in</a>
+                            <?php
+                          }
+                          
+                          ?>
                         </li>
                       </ul>
                     </li>

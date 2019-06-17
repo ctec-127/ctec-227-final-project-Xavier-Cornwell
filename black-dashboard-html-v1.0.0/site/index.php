@@ -45,7 +45,7 @@
                     <div class="col-md-12">
                         <div class="card mb-5">
                             <div class="card-header">
-                                <h2 class="title">Video Games Companies</h2>
+                                <h2 class="title">Video Game Companies</h2>
                                 <p class="category">Reviews for you're consumer satisfaction
                                     
                                 </p>

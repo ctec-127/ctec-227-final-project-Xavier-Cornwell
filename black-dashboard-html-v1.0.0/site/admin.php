@@ -8,7 +8,14 @@
       log_page($db,"admin");
     } catch(Exception $e) {
       $error = $e->getMessage();
-    }?>
+    }
+    //checking if an admin is using the page if not redirecting them
+    if (isset($_SESSION['loggedin']) && $_SESSION['role']=="admin") {
+    }
+    else {
+      header('index.php')
+    }
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">

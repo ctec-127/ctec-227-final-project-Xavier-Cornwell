@@ -113,7 +113,7 @@
                               </div>
                               <button class="btn btn-lg btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" value="Login">Sign in</button>
                               <div class="text-center">
-                                <a class="small" href="registration.php">Register</a></div>
+                              <a  href="index.php">Continue Without Signing in</a> <br> <a class="small" href="registration.php">Register</a></div>
                             </form>
                           </div>
                         </div>
