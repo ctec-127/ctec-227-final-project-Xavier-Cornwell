@@ -43,7 +43,7 @@
               ?>
               <li>
                 <a href="./admin.php">
-                  <i class="tim-icons icon-single-01"></i>
+                <i class="tim-icons icon-atom"></i>
                   <p>Admin</p>
                 </a>
               </li>           

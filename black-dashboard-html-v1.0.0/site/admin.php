@@ -13,7 +13,7 @@
     if (isset($_SESSION['loggedin']) && $_SESSION['role']=="admin") {
     }
     else {
-      header('Location: index.php')
+      header('Location: index.php');
     }
     ?>
 
