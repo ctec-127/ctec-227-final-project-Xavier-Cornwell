@@ -323,10 +323,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             echo $reviewComment;
                             ?></p>
                           <p>
-                             <!-- NEEED WORK FOR VOTING FOR COMMENTS NOT DONE YET -->
-                            <form action="dashboard.php?id=<?php echo $id; ?>" method='POST'>
+                             <!-- NEEED WORK FOR VOTING FOR COMMENTS NOT DONE YET
+                            <form action="dashboard.php?id=<?php //echo $id; ?>" method='POST'>
                             <a class="float-right btn btn-sm text-white btn-danger" value='1' name='agree' id='agree'> <i class="fa fa-heart"></i> Agree</a>
-                            </form>
+                            </form> -->
                           </p>
                           <?php
                           }

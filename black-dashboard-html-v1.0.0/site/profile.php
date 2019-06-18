@@ -115,7 +115,7 @@ $about=$row['about'];
                       <div class="row mt-3">
                         <div class="col-md-2 mt-0">
                           <img class="avatar" src="uploads/<?php echo $avatar;?>" alt="...">
-                          <p class="text-secondary text-left">10 users with this review</p>
+                          
                         </div>
                         <div class="col-md-10">
                           <p>
