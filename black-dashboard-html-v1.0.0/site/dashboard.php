@@ -8,7 +8,15 @@
       log_page($db,"dashboard");
     } catch(Exception $e) {
       $error = $e->getMessage();
-    }?>
+    }
+    
+    if (isset($_SESSION['loggedin'])) {
+      echo '';
+    }
+    else {
+      header('Location: login.php');    
+    }
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +32,7 @@
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
-  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet">
   <!-- Nucleo Icons -->
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <!-- CSS Files -->
@@ -32,13 +40,17 @@
   <link href="../assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
 </head>
 
-<body class=" ">
+<body class=" " >
 
 
- <?php 
-  
+ <?php     
+ 
+
+  if(isset($_GET['id'])){
      $id=$_GET['id'];
     
        $sql = "SELECT *
@@ -54,8 +66,24 @@
       $country =$row['country'];
       $logo =  $row['logo_path'];
       $about= $row['company_about'];
- 
- 
+      
+      //getting all the reviews and counting them for the average.
+      $sql = $db->query("SELECT id FROM review WHERE company_id = $id");
+      $numR = $sql->num_rows;
+
+      $sql = $db->query("SELECT SUM(rating) AS total FROM review WHERE company_id = $id");
+      $rData = $sql->fetch_array();
+      $total = $rData['total'];
+      if ($numR!=0) {
+        $avg = $total / $numR;
+      }
+      else{
+        $numR=1;
+        $avg =0;
+      }
+      
+      
+  
  ?>
       <?php require_once "..\inc\header.inc.php";   ?>
       <!-- End Navbar -->
@@ -81,7 +109,28 @@
                             <?php echo $service;?>
                             </h4>
                           </div>
-                        </p>
+                          <div class="comment-heart float-right " style="">
+                          <?php 
+                          //coding for getting the average rating but rounded up
+                          $sum = getSum($avg);
+                          $countSum=0;
+                          $totalHearts= 5;
+                          if (is_infinite($sum)) {
+                            
+                          }
+                          else{
+                          for ($i=0; $i < $sum ; $i++) { 
+                            $countSum= $countSum + 1;
+                            echo "<span class='fa fa-heart checked '></span>";
+                          }
+                          $totalHearts= $totalHearts-$countSum;
+                          for ($i=0; $i <$totalHearts ; $i++) { 
+                            echo "<span class='fa fa-heart'></span>";
+                          }
+                        }
+                          ?>
+
+                              </div>
                         <p><?php echo $country;?></p>
                         <p class="card-description text-left">
                         <?php echo $about;?> 
@@ -99,32 +148,89 @@
           </div>
         </div>
         <?php 
- 
 
   }
+  
+  }
+
+
 ?>
+<?php
+    
+    $conn = new mysqli('localhost', 'root', '', 'game_com_review');
+    $userId= $_SESSION['id'];
+    if (isset($_POST['save'])) {
+      $sql = $db->query("SELECT * FROM review WHERE user_id='$userId' AND company_id ='$id' ORDER BY id  DESC LIMIT 1");
+        $uData = $sql->fetch_assoc();
+        $uID = $uData['id'];
+        $ratedIndex = $conn->real_escape_string($_POST['ratedIndex']);
+        $ratedIndex++;
+
+        if (!$uID) {
+            $db->query("INSERT INTO review (rating, user_id, company_id) VALUES ('$ratedIndex','$userId','$id')");
+            $sql = $db->query("SELECT * FROM review WHERE user_id='$userId' AND company_id ='$id' ORDER BY id  DESC LIMIT 1");
+            $uData = $sql->fetch_assoc();
+            $uID = $uData['id'];
+        } else
+            $db->query("UPDATE review SET rating='$ratedIndex' WHERE company_id='$id' AND user_id='$userId' LIMIT 1");
+
+        exit(json_encode(array('id' => $uID)));
+    }
+
+// CODE FOR UPLOADING THE REVIEW DESCRIPTION 
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+  $id = $_GET['id'];
+  $review = $db->real_escape_string($_POST['review']);
+
+  $sql = $db->query("SELECT * FROM review WHERE user_id='$userId' AND company_id ='$id' ORDER BY id  DESC LIMIT 1");
+  $uData = $sql->fetch_assoc();
+  $uID = $uData['id'];
+
+  if (!$uID) {
+    $db->query("INSERT INTO review (review) VALUES ('$review')");
+    
+  }
+ else{
+    $db->query("UPDATE review SET review='$review' WHERE company_id='$id' AND user_id='$userId' LIMIT 1");
+
+}
+
+}
+
+?>
+
         <div class="row">
           <div class="col-lg-6 col-md-12">
-            <div class="card card-chart">
+            <div class="card card-chart" style="height:200px;">
               <div class="card-header ">
-                <h5 class="card-category">Ratings</h5>
-                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
+                <h5 class="card-category">Reviews</h5>
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary  "style="font-size:18px; "></i> <?php echo $numR;  ?></h3>
               </div>
               <div class="card-body ">
               </div>
             </div>
           </div>
           <div class="col-lg-6 col-md-12">
-            <div class="card card-chart">
+            <div class="card card-chart" style="font-size:18px; height:200px;">
               <div class="card-header ">
-                <h5 class="card-category">Reviews</h5>
-                <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100K</h3>
+                <h5 class="card-category">rate</h5>
+                <div class="rating mt-5 align-items-center" style="font-size:2em;" >
+                <!-- Area below is for heart rating -->
+                <i class="fa fa-heart fa-2x" data-index="0" ></i>
+        <i class="fa fa-heart fa-2x" data-index="1"></i>
+        <i class="fa fa-heart fa-2x" data-index="2"></i>
+        <i class="fa fa-heart fa-2x" data-index="3"></i>
+        <i class="fa fa-heart fa-2x" data-index="4"></i>
+        <br><br>
+     
+                </div>
               </div>
               <div class="card-body ">
               </div>
             </div>
           </div>
-        </div>
+        </div> 
+        
         <div class="row">
           <div class="col-lg-12 col-md-12">
             <div class="card card-tasks">
@@ -132,19 +238,14 @@
                 <h3 class="card-title">
                   Leave a Review
                 </h3>
+                
               </div>
               <div class="card-body ">
-                <div class="rating mt-5 align-items-center pb-4">
-                  <span class="fa fa-heart checked"></span>
-                  <span class="fa fa-heart checked"></span>
-                  <span class="fa fa-heart checked"></span>
-                  <span class="fa fa-heart"></span>
-                  <span class="fa fa-heart"></span>
-                </div>
-                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?> " method="POST">
+
+                <form action="<?php echo "dashboard.php?id=$id;"?> " method="POST">
                   <div class="form-group">
                     <label>Review</label>
-                    <textarea type="text" class="form-control" placeholder="Leave a Review" value="Mike" rows="10"
+                    <textarea type="text" class="form-control" name="review" id="review" placeholder="Leave a Review" value="Mike" rows="10"
                       cols="50"></textarea>
                   </div>
                   <button class="btn-lg btn-primary" style="border:none;" type="submit">Submit Review</button>
@@ -154,6 +255,18 @@
             </div>
           </div>
           <!-- COMMENTS AREA -->
+          <?php 
+          $id=$_GET['id'];
+    $comments = "SELECT review.id, review.review, review.rating, user.username, user.avatar_path , user.user_id
+            FROM review
+            JOIN user 
+            ON review.user_id = user.user_id 
+            WHERE company_id = '$id'
+            ORDER BY review.date ASC
+           ";
+           $Rcomments = $db->query("$comments");
+           
+ ?>
           <div class="col-lg-12 col-md-12">
             <div class="card ">
               <div class="card-header">
@@ -165,38 +278,67 @@
 
                   <div>
                     <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-2">
-                          <img class="avatar" src="../assets/img/anime6.png" alt="...">
+                   <?php 
+                   
+                   
+                   
+                   while ($row = $Rcomments->fetch_assoc()){
+                     $review=$row['id'];
+                     $username = $row['username'];
+                     $reviewComment = $row['review'];
+                     $reviewRating = $row['rating'];
+                     $avatar = $row['avatar_path'];
+                     $userID =$row['user_id'];
+                     
+                     ?>
+                      <div class="row mt-3">
+                        <div class="col-md-2 mt-0">
+                          <img class="avatar" src="uploads/<?php echo $avatar;?>" alt="...">
                           <p class="text-secondary text-left">10 users with this review</p>
                         </div>
                         <div class="col-md-10">
                           <p>
                             <a class="float-left"
-                              href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman
-                                Akash</strong></a>
-                                <div class="comment-heart" style="font-size:10px;">
-                                <span class="fa fa-heart float-right"></span>
-                                <span class="fa fa-heart float-right"></span>
-                                <span class="fa fa-heart checked float-right"></span>
-                                <span class="fa fa-heart checked float-right"></span>
-                                <span class="fa fa-heart checked float-right"></span>
+                              href="profile.php?userid=<?php echo $userID; ?>"><strong><?php echo $username;?></strong></a>
+                             <div class="comment-heart float-right" style="font-size:10px; ">
+                             <?php
+                             $commentHearts=5;
+                             $countSum=0;
+                             for ($i=0; $i < $reviewRating ; $i++) { 
+                            $countSum= $countSum + 1;
+                            echo "<span class='fa fa-heart checked '></span>";
+                          }
+                          $commentHearts= $commentHearts-$countSum;
+                          for ($i=0; $i < $commentHearts ; $i++) { 
+                            echo "<span class='fa fa-heart'></span>";
+                          }
+                        
+                        ?>
                               </div>
 
 
                           </p>
                           <div class="clearfix"></div>
-                          <p>Lorem Ipsum is simply dummy text of the pr make but also the leap into electronic
-                            typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-                            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-                            publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                          <p><?php if($reviewComment != '') {
+                            echo $reviewComment;
+                            ?></p>
                           <p>
-                            <a class="float-right btn btn-sm btn-outline-primary ml-2"> <i class="fa fa-reply"></i>
-                              Disagree</a>
-                            <a class="float-right btn btn-sm text-white btn-danger"> <i class="fa fa-heart"></i> Agree</a>
+                             <!-- NEEED WORK FOR VOTING FOR COMMENTS NOT DONE YET -->
+                            <form action="dashboard.php?id=<?php echo $id; ?>" method='POST'>
+                            <a class="float-right btn btn-sm text-white btn-danger" value='1' name='agree' id='agree'> <i class="fa fa-heart"></i> Agree</a>
+                            </form>
                           </p>
+                          <?php
+                          }
+                          else {
+                            echo '';
+                          }
+                          ?>
                         </div>
                       </div>
+                      <?php
+                  } 
+                  ?>
                     </div>
                   </div>
                 </div>
@@ -205,6 +347,7 @@
           </div>
         </div>
       </div>
+              
       <footer class="footer">
         <div class="container-fluid">
           <nav>
@@ -229,7 +372,7 @@
 
 
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -244,6 +387,8 @@
   <!-- Black Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
   <script>
+  //demo  site js
+  var ratedIndex = -1;
     $(document).ready(function () {
       $().ready(function () {
         $sidebar = $('.sidebar');
@@ -354,13 +499,61 @@
       });
     });
   </script>
-  <script>
-    $(document).ready(function () {
-      // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
+ <script src="http://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+    <script>
+        var ratedIndex = -1, uID = 0;
 
-    });
-  </script>
+        $(document).ready(function () {
+            resetStarColors();
+
+            if (localStorage.getItem('ratedIndex') != null) {
+                setStars(parseInt(localStorage.getItem('ratedIndex')));
+                uID = localStorage.getItem('uID');
+            }
+
+            $('.fa-2x').on('click', function () {
+               ratedIndex = parseInt($(this).data('index'));
+               localStorage.setItem('ratedIndex', ratedIndex);
+               saveToTheDB();
+            });
+
+            $('.fa-2x').mouseover(function () {
+                resetStarColors();
+                var currentIndex = parseInt($(this).data('index'));
+                setStars(currentIndex);
+            });
+
+            $('.fa-2x').mouseleave(function () {
+                resetStarColors();
+
+                if (ratedIndex != -1)
+                    setStars(ratedIndex);
+            });
+        });
+
+        function saveToTheDB() {
+            $.ajax({
+               url: "dashboard.php?id=<?php echo $id; ?>",
+               method: "POST",
+               dataType: 'json',
+               data: {
+                   save: 1,
+                   ratedIndex: ratedIndex
+               }, success: function (r) {
+
+               }
+            });
+        }
+
+        function setStars(max) {
+            for (var i=0; i <= max; i++)
+                $('.fa-2x:eq('+i+')').css('color', 'pink');
+        }
+
+        function resetStarColors() {
+            $('.fa-2x').css('color', 'grey');
+        }
+    </script>
 </body>
 
 </html>

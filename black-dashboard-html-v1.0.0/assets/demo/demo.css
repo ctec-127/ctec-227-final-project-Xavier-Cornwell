@@ -87,3 +87,38 @@
 .item-content-block{ padding-left:20px; padding-bottom:20px; display:block;}
 .tags a{color:white; background-color:gray; padding:10px; display:inline-block; font-size:11px; text-transform:uppercase; line-height:11px; border-radius:2px; margin-bottom:5px; margin-right:2px; text-decoration:none;}
 .tags a:hover{background-color:lightgray;}
+
+ul {
+  margin: 0px;
+  padding: 10px 0px 0px 0px;
+}
+
+li.star {
+  list-style: none;
+  display: inline-block;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #9E9E9E;
+}
+
+li.star.selected {
+  color: #ff6e00;
+}
+
+.row-title {
+  font-size: 20px;
+  color: #00BCD4;
+}
+
+.review-note {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+.row-item {
+  margin-bottom: 20px;
+  border-bottom: #F0F0F0 1px solid;
+}
+p.text-address {
+  font-size: 12px;
+}

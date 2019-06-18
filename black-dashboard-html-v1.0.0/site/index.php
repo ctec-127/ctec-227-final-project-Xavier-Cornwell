@@ -62,8 +62,7 @@
                                             $service= $row['service'];
                                             $country =$row['country'];
                                             $logo =  $row['logo_path'];
-                                    
-                                    
+
                                     
                                     ?>
                                     <div class="font-icon-list  col-sm-6 col-md-4 " >
@@ -75,11 +74,46 @@
                                             <p class="mt-0"> <?php echo $service; ?></p>
                                             <p class="mt-0"> <?php echo $country; ?></p>
                                             <div class="ratings">
-                                                <span class="fa fa-heart checked"></span>
-                                                <span class="fa fa-heart checked"></span>
-                                                <span class="fa fa-heart checked"></span>
-                                                <span class="fa fa-heart"></span>
-                                                <span class="fa fa-heart"></span>
+
+                                                        <?php  
+                                                                                              
+                                            $sql = $db->query("SELECT id FROM review WHERE company_id = $companyID");
+                                            $numR = $sql->num_rows;
+                                      
+                                            $sql = $db->query("SELECT SUM(rating) AS total FROM review WHERE company_id = $companyID");
+                                            $rData = $sql->fetch_array();
+                                            $total = $rData['total'];
+                                          
+                                            if ($numR!=0) {
+                                              $avg = $total / $numR;
+                                            }
+                                            else{
+                                              $numR=1;
+                                              $avg =0;
+                                            }
+                                            
+                                              
+                                                    $sum = getSum($avg);
+                                                    $countSum=0;
+                                                    $totalHearts= 5;
+                                                    if (is_infinite($sum)) {
+                                                        
+                                                    }
+                                                    else{
+                                                    for ($i=0; $i < $sum ; $i++) { 
+                                                        $countSum= $countSum + 1;
+                                                        echo "<span class='fa fa-heart checked '></span>";
+                                                    }
+                                                    $totalHearts= $totalHearts-$countSum;
+                                                    for ($i=0; $i <$totalHearts ; $i++) { 
+                                                        echo "<span class='fa fa-heart'></span>";
+                                                    }
+                                                    }
+                                                    
+                                          
+                       ?>
+                                                
+                                         
                                               </div>
                                         </div>
                                     </div>

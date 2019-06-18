@@ -21,48 +21,13 @@ function build_select($db,$key){
 	<?php }
 }
 
-function insert_post($db){
-	$user_id = $db->real_escape_string($_SESSION['id']);
-	$content = $db->real_escape_string($_POST['content']);
-	$mood = $db->real_escape_string($_POST['mood']);
-	$sql = "INSERT INTO posts (user_id,content,mood) VALUES ('$user_id','$content','$mood')";
 
-	$result = $db->query($sql);
+function getSum($avg){
+	$sum= round($avg, PHP_ROUND_HALF_UP);
+	return $sum;} 
 
-	if(!$db->error){
-		header("location: login.php");
-	} else {
-		return false;
-	}
-}
 
-function hide_post($db){
-	$sql = "UPDATE posts SET hidden=1 WHERE id=" . $_GET['id'] . " LIMIT 1";
-	
-	$result = $db->query($sql);
 
-	if (!$db->error){
-		$db->close();
-		header("location: login.php");
-	} else {
-		return false;
-	}
-}
-
-function delete_post($db){
-	
-	$sql = "DELETE FROM posts WHERE id=" . $_GET['id'] . " LIMIT 1";
-	echo $sql;
-	
-	$result = $db->query($sql);
-
-	if (!$db->error){
-		$db->close();
-		header("location: login.php");
-	} else {
-		return false;
-	}
-}
 
 
 

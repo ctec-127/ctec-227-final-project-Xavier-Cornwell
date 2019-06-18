@@ -15,7 +15,7 @@
       echo '';
     }
     else {
-      header('login.php');    
+      header('Location: login.php');    
     }
     
     
